@@ -47,7 +47,7 @@
     xhr.onreadystatechange = function () {
       if (xhr.readyState === 4 && xhr.status === 200) {
         conformanceRequestCb(errback, callback, fhirServiceUrl, xhr.responseText)
-      } else {
+      } else if (xhr.readyState === 4 && xhr.status !== 200) {
         errback(xhr.responseText)
       }
     }
@@ -56,8 +56,8 @@
 
   doAuthorize =  function (params, errback) { // eslint-disable-line
     if (!errback){
-      errback = function(){
-          console.log("Failed to discover authorization URL given", params);
+      errback = function(err){
+        console.log("Failed to discover authorization URL given " + err, params)
       }
     }
 
